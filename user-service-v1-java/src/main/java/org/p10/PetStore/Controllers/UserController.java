@@ -7,13 +7,16 @@ import org.p10.PetStore.Repositories.UserRepository;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import com.google.gson.Gson;
 
 @Path("/v1")
 public class UserController {
 
     private final UserRepository userRepository;
+    private final Gson gson;
 
     public UserController() {
+        this.gson = new Gson();
         this.userRepository = new UserRepository();
     }
 
@@ -28,7 +31,7 @@ public class UserController {
                 UserStatus.values()[userPojo.getStatus()]);
         int affectedRows = userRepository.insertUser(user);
         if (affectedRows > 0) {
-            return Response.ok().build();
+            return Response.ok(affectedRows).build();
         } else {
             return Response.serverError().build();
         }
@@ -45,7 +48,7 @@ public class UserController {
                 UserStatus.values()[userPojo.getStatus()]);
         user = userRepository.updateUser(user);
         if (user != null) {
-            return Response.ok(user).build();
+            return Response.ok(gson.toJson(user)).build();
         } else {
             return Response.serverError().build();
         }
@@ -68,6 +71,6 @@ public class UserController {
     @Produces("text/plain")
     public Response getUser(@PathParam("username") String username) {
         User user = userRepository.getUser(username);
-        return Response.ok(user).build();
+        return Response.ok(gson.toJson(user)).build();
     }
 }
