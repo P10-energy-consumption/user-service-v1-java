@@ -1,13 +1,14 @@
 package org.p10.PetStore.Controllers;
 
-import org.p10.PetStore.Models.User;
+import com.google.gson.Gson;
 import org.p10.PetStore.Models.Pojo.UserPojo;
+import org.p10.PetStore.Models.User;
 import org.p10.PetStore.Models.UserStatus;
 import org.p10.PetStore.Repositories.UserRepository;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import com.google.gson.Gson;
 
 @Path("/v1")
 public class UserController {
@@ -22,7 +23,7 @@ public class UserController {
 
     @POST
     @Path("/user")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response insertUser(UserPojo userPojo) {
         User user = new User(userPojo.getId(), userPojo.getUserName(),
                 userPojo.getFirstName(), userPojo.getLastName(),
@@ -39,7 +40,7 @@ public class UserController {
 
     @PUT
     @Path("/user")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response updateUser(UserPojo userPojo) {
         User user = new User(userPojo.getId(), userPojo.getUserName(),
                 userPojo.getFirstName(), userPojo.getLastName(),
@@ -56,7 +57,7 @@ public class UserController {
 
     @DELETE
     @Path("/user/{username}")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response deleteUser(@PathParam("username") String username) {
         String name = userRepository.deleteUser(username);
         if (name != null) {
@@ -68,7 +69,7 @@ public class UserController {
 
     @GET
     @Path("/user/{username}")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response getUser(@PathParam("username") String username) {
         User user = userRepository.getUser(username);
         return Response.ok(gson.toJson(user)).build();
